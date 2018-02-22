@@ -19,18 +19,9 @@ let stack = generic_stackv4 default_network
 (** Go! *)
 
 let main =
-  let packages = [
-    (* package ~sublibs:["mirage"] "tls" *)
-  ] in
-  let deps = [
-    (* abstract nocrypto *)
-  ] in
   let keys =
-    let a = Key.abstract in
-    [ a dest_ip; a dest_port ; a local_port ]
+    [ Key.abstract dest_ip; Key.abstract dest_port ; Key.abstract local_port ]
   in
-  foreign ~packages ~keys ~deps
-    "Unikernel.Main" (pclock @-> stackv4 @-> job)
+  foreign ~keys "Unikernel.Main" (console @-> stackv4 @-> job)
 
-let () =
-register "bouncer" [ main $ default_posix_clock $ stack ]
+let () = register "bouncer" [ main $ default_console $ stack ]
